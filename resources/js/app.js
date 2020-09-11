@@ -8,6 +8,11 @@ window.Vue = require('vue');
     import storeVuex from './store/index'
     const store = new Vuex.Store(storeVuex)
 // end vuex configure
+
+//Start Moment
+import moment from 'moment'
+window.moment =moment
+//End Moment
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('main-app', require('./components/MainApp').default);
 Vue.component('chat-app', require('./components/ChatApp').default);

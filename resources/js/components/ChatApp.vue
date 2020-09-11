@@ -20,7 +20,7 @@
                 <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="avatar" />
 
                 <div class="chat-about">
-                    <div class="chat-with">Chat with Vincent Porter</div>
+                    <div class="chat-with" v-if="userMessage.user">{{userMessage.user.name}}</div>
                     <div class="chat-num-messages">already 1 902 messages</div>
                 </div>
                 <i class="fa fa-star"></i>
@@ -28,47 +28,15 @@
 
             <div class="chat-history" style="overflow-y: scroll; height:300px;">
                 <ul>
-                    <li>
+                    <li v-for="message in userMessage.message">
                         <div class="message-data">
-                            <span class="message-data-name"><i class="fa fa-circle online"></i> Vincent</span>
-                            <span class="message-data-time">10:12 AM, Today</span>
+                            <span class="message-data-name"><i class="fa fa-circle online"></i></span>
+                            <span class="message-data-time">{{dateTimeFormate(message.created_at)}}</span>
                         </div>
-                        <div class="message my-message">
-                            Are we meeting today? Project has been already finished and I have results to show you.
-                        </div>
-                    </li>
-
-                    <li class="clearfix">
-                        <div class="message-data align-right">
-                            <span class="message-data-time" >10:14 AM, Today</span> &nbsp; &nbsp;
-                            <span class="message-data-name" >Olia</span> <i class="fa fa-circle me"></i>
-
-                        </div>
-                        <div class="message other-message" style="float:right">
-                            Well I am not sure. The rest of the team is not here yet. Maybe in an hour or so? Have you faced any problems at the last phase of the project?
+                        <div :class="`message ${message.to == userMessage.user.id ? 'other-message' : 'my-message'}`">
+                           {{message.message}}
                         </div>
                     </li>
-
-                    <li>
-                        <div class="message-data">
-                            <span class="message-data-name"><i class="fa fa-circle online"></i> Vincent</span>
-                            <span class="message-data-time">10:20 AM, Today</span>
-                        </div>
-                        <div class="message my-message">
-                            Actually everything was fine. I'm very excited to show this to our team.
-                        </div>
-                    </li>
-
-                    <li>
-                        <div class="message-data">
-                            <span class="message-data-name"><i class="fa fa-circle online"></i> Vincent</span>
-                            <span class="message-data-time">10:31 AM, Today</span>
-                        </div>
-                        <i class="fa fa-circle online"></i>
-                        <i class="fa fa-circle online" style="color: #AED2A6"></i>
-                        <i class="fa fa-circle online" style="color:#DAE9DA"></i>
-                    </li>
-
                 </ul>
 
             </div> <!-- end chat-history -->
@@ -102,12 +70,18 @@
         computed:{
             userList(){
                return this.$store.getters.userList
+            },
+            userMessage(){
+               return this.$store.getters.userMessage
             }
         },
         created(){
 
         },
         methods:{
+            dateTimeFormate(date){
+               return moment(date).calendar();//today at 1:00pm
+            },
             selectUser(userId){
                 this.$store.dispatch('userMessage',userId)
             }
