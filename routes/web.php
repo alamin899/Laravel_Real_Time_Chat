@@ -18,7 +18,11 @@ Route::get('/', function () {
 });
 Route::group(['namespace' => 'Backend','middleware' => 'auth'],function ()
 {
+    //user
     Route::get('/users','UserController@index')->name('user.index');
+
+    //message
+    Route::get('/message/{user_id}','MessageController@index')->name('message.index');
 });
 
 Auth::routes();

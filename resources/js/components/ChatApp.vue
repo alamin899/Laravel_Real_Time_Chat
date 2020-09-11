@@ -4,7 +4,7 @@
             <input type="text" placeholder="search" />
             <i class="fa fa-search"></i>
             <ul>
-                <li class="clearfix" v-for="user in userList">
+                <li @click.prevent="selectUser(user.id)" class="clearfix" v-for="user in userList">
                     <div class="about">
                         <div class="name">{{user.name}}</div>
                         <div class="status">
@@ -108,7 +108,9 @@
 
         },
         methods:{
-
+            selectUser(userId){
+                this.$store.dispatch('userMessage',userId)
+            }
         },
     }
 </script>
