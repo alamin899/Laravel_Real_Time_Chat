@@ -7,6 +7,7 @@ use App\Message;
 use App\Repositories\MessageRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MessageController extends Controller
 {
@@ -52,7 +53,17 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $types=[0,1];
+        foreach ($types as $type){
+            $req = new Request([
+                'from' => Auth::user()->id,
+                'to' => $request->receiver_id,
+                'message' =>$request->message,
+                'type' => $type,
+            ]);
+            $sendMessage= $this->messageRepository->store($req);
+        }
+        return response()->json($sendMessage,200);
     }
 
     /**

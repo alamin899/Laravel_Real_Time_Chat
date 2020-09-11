@@ -23,6 +23,7 @@ Route::group(['namespace' => 'Backend','middleware' => 'auth'],function ()
 
     //message
     Route::get('/message/{user_id}','MessageController@index')->name('message.index');
+    Route::post('/message/store','MessageController@store')->name('message.store');
 });
 
 Auth::routes();

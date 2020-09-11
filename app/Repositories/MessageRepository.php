@@ -20,9 +20,11 @@ class MessageRepository
             $messages = Message::where(function ($messages) use ($user_id){
                 $messages->where('from',Auth::user()->id);
                 $messages->where('to',$user_id);
+                $messages->where('type',0);
             })->orWhere(function ($messages) use ($user_id){
                 $messages->where('from',$user_id);
                 $messages->where('to',Auth::user()->id);
+                $messages->where('type',1);
             })->get();
             return $messages;
         }
@@ -37,8 +39,15 @@ class MessageRepository
 
     }
 
-    public function store()
+    public function store($request)
     {
+        $store = Message::create([
+            'from' => $request->from,
+            'to' => $request->to,
+            'message' => $request->message,
+            'type' => $request->type,
+        ]);
+        return $store;
 
     }
 
