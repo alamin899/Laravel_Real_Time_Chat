@@ -24,6 +24,8 @@ Route::group(['namespace' => 'Backend','middleware' => 'auth'],function ()
     //message
     Route::get('/message/{user_id}','MessageController@index')->name('message.index');
     Route::post('/message/store','MessageController@store')->name('message.store');
+    Route::delete('/message/{message}','MessageController@singleMessageDestroy')->name('single-message.destroy');
+    Route::delete('/message/{user_id}/all','MessageController@allMessageDestroy')->name('all-message.destroy');
 });
 
 Auth::routes();

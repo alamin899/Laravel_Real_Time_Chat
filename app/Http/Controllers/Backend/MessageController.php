@@ -106,8 +106,18 @@ class MessageController extends Controller
      * @param  \App\Message  $message
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Message $message)
+    public function singleMessageDestroy($message_id)
     {
-        //
+        if (!\Request::ajax()){
+            abort('404');
+        }
+        return $this->messageRepository->singleMessageDestroy($message_id);
+    }
+    public function allMessageDestroy($user_id)
+    {
+        if (!\Request::ajax()){
+            abort('404');
+        }
+        return $this->messageRepository->allMessageDestroy($user_id);
     }
 }

@@ -21,9 +21,17 @@
 
                 <div class="chat-about">
                     <div class="chat-with" v-if="userMessage.user">{{userMessage.user.name}}</div>
-                    <div class="chat-num-messages">already 1 902 messages</div>
                 </div>
-                <i class="fa fa-star"></i>
+                <ul class="nav nav-tabs">
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">...</a>
+                    <div class="dropdown-menu">
+                        <a @click.prevent="deleteAllMessage" class="dropdown-item" href="#">Delete All Message</a>
+                    </div>
+                </li>
+
+            </ul>
             </div> <!-- end chat-header -->
 
             <div class="chat-history" v-chat-scroll style="overflow-y: scroll; height:300px;">
@@ -32,6 +40,15 @@
                         <div class="message-data">
                             <span class="message-data-name"><i class="fa fa-circle online"></i></span>
                             <span class="message-data-time">{{dateTimeFormate(message.created_at)}}</span>
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">...</a>
+                                    <div class="dropdown-menu">
+                                        <a @click.prevent="deleteSingleMessage(message.id)" class="dropdown-item" href="#">Delete Message</a>
+                                    </div>
+                                </li>
+                            </ul>
+
                         </div>
                         <div :class="`message ${message.to == userMessage.user.id ? 'other-message' : 'my-message'}`">
                            {{message.message}}
@@ -94,6 +111,19 @@
                     this.message =''
                 }
 
+            },
+
+            deleteSingleMessage(message_id){
+                axios.delete('/message/'+message_id)
+                    .then(response=>{
+                        this.selectUser(this.userMessage.user.id)
+                    })
+            },
+            deleteAllMessage(){
+                axios.delete('/message/'+this.userMessage.user.id+'/all')
+                    .then(response=>{
+                        this.selectUser(this.userMessage.user.id)
+                    })
             }
         },
     }
