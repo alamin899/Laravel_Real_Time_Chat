@@ -5,13 +5,15 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Message;
 use App\Repositories\MessageRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
-    public function __construct(MessageRepository $messageRepository)
+    public function __construct(MessageRepository $messageRepository,UserRepository $userRepository)
     {
         $this->messageRepository = $messageRepository;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -25,7 +27,10 @@ class MessageController extends Controller
         {
             abort("404","message not found");
         }
-        return response()->json($this->messageRepository->index($user_id));
+        return response()->json([
+            'message'=> $this->messageRepository->index($user_id),
+            'user' => $this->userRepository->index($user_id)
+        ]);
 
     }
 

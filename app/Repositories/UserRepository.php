@@ -14,8 +14,11 @@ use Illuminate\Support\Facades\Auth;
 
 class UserRepository
 {
-    public function index()
+    public function index($user_id='')
     {
+        if ($user_id != ''){
+            return User::findOrFail($user_id);
+        }
         return User::latest()->get()->except(Auth::id());
     }
 
