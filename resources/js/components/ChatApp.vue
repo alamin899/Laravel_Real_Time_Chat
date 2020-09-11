@@ -26,7 +26,7 @@
                 <i class="fa fa-star"></i>
             </div> <!-- end chat-header -->
 
-            <div class="chat-history" style="overflow-y: scroll; height:300px;">
+            <div class="chat-history" v-chat-scroll style="overflow-y: scroll; height:300px;">
                 <ul>
                     <li v-for="message in userMessage.message">
                         <div class="message-data">
@@ -42,12 +42,11 @@
             </div> <!-- end chat-history -->
 
             <div class="chat-message clearfix">
-                <textarea name="chat-message-to-send" placeholder ="Type your message" rows="3"></textarea>
+                <textarea @keydown.enter="sendMessage" v-model="message" name="chat-message-to-send" placeholder ="Type your message" rows="3"></textarea>
 
                 <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
                 <i class="fa fa-file-image-o"></i>
-
-                <button>Send</button>
+                <button @click="sendMessage">Send</button>
 
             </div> <!-- end chat-message -->
 
@@ -61,7 +60,7 @@
         name: "ChatApp",
         data(){
             return{
-
+                message:'',
             }
         },
         mounted(){
@@ -84,6 +83,17 @@
             },
             selectUser(userId){
                 this.$store.dispatch('userMessage',userId)
+            },
+            sendMessage(e){
+                e.preventDefault();
+                if(this.message !=''){
+                    axios.post('/message/store',{message: this.message,receiver_id:this.userMessage.user.id})
+                        .then(response=>{
+                            this.selectUser(this.userMessage.user.id)
+                        })
+                    this.message =''
+                }
+
             }
         },
     }
