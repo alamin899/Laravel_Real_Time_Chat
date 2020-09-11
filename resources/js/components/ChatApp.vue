@@ -4,24 +4,14 @@
             <input type="text" placeholder="search" />
             <i class="fa fa-search"></i>
             <ul>
-                <li class="clearfix">
+                <li class="clearfix" v-for="user in userList">
                     <div class="about">
-                        <div class="name">Vincent Porter</div>
+                        <div class="name">{{user.name}}</div>
                         <div class="status">
                             <i class="fa fa-circle online"></i> online
                         </div>
                     </div>
                 </li>
-
-                <li class="clearfix">
-                    <div class="about">
-                        <div class="name">Aiden Chavez</div>
-                        <div class="status">
-                            <i class="fa fa-circle offline"></i> left 7 mins ago
-                        </div>
-                    </div>
-                </li>
-
             </ul>
         </div>
 
@@ -100,7 +90,26 @@
 
 <script>
     export default {
-        name: "ChatApp"
+        name: "ChatApp",
+        data(){
+            return{
+
+            }
+        },
+        mounted(){
+            this.$store.dispatch('userList')
+        },
+        computed:{
+            userList(){
+               return this.$store.getters.userList
+            }
+        },
+        created(){
+
+        },
+        methods:{
+
+        },
     }
 </script>
 
