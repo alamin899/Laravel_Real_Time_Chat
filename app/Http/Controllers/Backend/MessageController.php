@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Controller;
 use App\Message;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class MessageController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**

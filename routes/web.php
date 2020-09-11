@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('auth.login');
 });
+Route::group(['namespace' => 'Backend','middleware' => 'auth'],function ()
+{
+    Route::get('/users','UserController@index')->name('user.index');
+});
 
 Auth::routes();
 
