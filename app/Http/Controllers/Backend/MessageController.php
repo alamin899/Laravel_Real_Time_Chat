@@ -4,17 +4,28 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Message;
+use App\Repositories\MessageRepository;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
+    public function __construct(MessageRepository $messageRepository)
+    {
+        $this->messageRepository = $messageRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($user_id ='',Request $request)
     {
+        if(!$request->ajax())
+        {
+            abort("404","message not found");
+        }
+        return response()->json($this->messageRepository->index($user_id));
 
     }
 

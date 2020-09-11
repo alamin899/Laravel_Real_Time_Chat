@@ -3,12 +3,18 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\UserRepository;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,9 +24,9 @@ class UserController extends Controller
     {
         if($request->ajax())
         {
-            return response()->json(User::latest()->get()->except(Auth::id()));
+            return response()->json($this->userRepository->index());
         }
-        abort("404","not found");
+        abort("404","user not found");
     }
 
     /**
