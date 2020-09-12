@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Events\MessageSend;
 use App\Http\Controllers\Controller;
 use App\Message;
 use App\Repositories\MessageRepository;
@@ -62,6 +63,7 @@ class MessageController extends Controller
                 'type' => $type,
             ]);
             $sendMessage= $this->messageRepository->store($req);
+            broadcast(new MessageSend($sendMessage));
         }
         return response()->json($sendMessage,200);
     }

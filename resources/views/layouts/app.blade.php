@@ -77,5 +77,10 @@
             @yield('content')
         </main>
     </div>
+    @if(auth()->check())
+        <script>
+            var authUser = @JSON(auth()->user())
+        </script>
+        @endif
 </body>
 </html>
