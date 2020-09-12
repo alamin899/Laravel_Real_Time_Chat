@@ -84,7 +84,6 @@
             Echo.private(`chat.${authUser.id}`)
                 .listen('MessageSend', (e) => {
                     this.selectUser(e.message.from);
-                    console.log(e.message.message);
                 });
             this.$store.dispatch('userList')
         },
