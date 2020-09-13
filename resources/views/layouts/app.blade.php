@@ -79,7 +79,7 @@
     </div>
     @if(auth()->check())
         <script>
-            var authUser = @JSON(auth()->user())
+            var authuser = @JSON(auth()->user())
         </script>
         @endif
 </body>
