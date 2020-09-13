@@ -55,15 +55,19 @@
                         </div>
                     </li>
                 </ul>
-
             </div> <!-- end chat-history -->
 
             <div class="chat-message clearfix">
-                <textarea @keydown.enter="sendMessage" v-model="message" name="chat-message-to-send" placeholder ="Type your message" rows="3"></textarea>
+                <div class="row"><p v-if="typing">{{typing}} Typing......</p></div>
+                <div class="row">
+                    <textarea v-if="userMessage.user" @keydown.enter="sendMessage" @keyup="typingEvent(userMessage.user.id)" v-model="message" name="chat-message-to-send" placeholder ="Type your message" rows="3"></textarea>
+                    <textarea v-else disabled @keydown.enter="sendMessage" v-model="message" name="chat-message-to-send" placeholder ="Type your message" rows="3"></textarea>
 
-                <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
-                <i class="fa fa-file-image-o"></i>
-                <button @click="sendMessage">Send</button>
+                    <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
+                    <i class="fa fa-file-image-o"></i>
+                    <button @click="sendMessage">Send</button>
+                </div>
+
 
             </div> <!-- end chat-message -->
 
@@ -78,14 +82,25 @@
         data(){
             return{
                 message:'',
+                typing:'',
             }
         },
         mounted(){
-            Echo.private(`chat.${authUser.id}`)
+            Echo.private(`chat.${authuser.id}`)
                 .listen('MessageSend', (e) => {
                     this.selectUser(e.message.from);
                 });
             this.$store.dispatch('userList')
+
+            Echo.private('typingevent')
+                .listenForWhisper('typing', (e) => {
+                    if(e.user.id==this.userMessage.user.id && e.userId == authuser.id){
+                        this.typing = e.user.name;
+                    }
+                    setTimeout(() => {
+                        this.typing = '';
+                    }, 3000);
+                });
         },
         computed:{
             userList(){
@@ -116,7 +131,14 @@
                 }
 
             },
-
+            typingEvent(userId){
+                Echo.private('typingevent')
+                    .whisper('typing', {
+                        'user': authuser,
+                        'typing':this.message,
+                        'userId':userId
+                    });
+            },
             deleteSingleMessage(message_id){
                 axios.delete('/message/'+message_id)
                     .then(response=>{
